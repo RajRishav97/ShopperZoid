@@ -16,6 +16,7 @@ export class LoginPageComponent implements OnInit {
   public password = '';
   private invalidLogin = true;
   public decodedToken;
+  public notRegistered=false;
 
   private loginForm = new FormGroup({
     Email: new FormControl("", [Validators.required, Validators.email]),
@@ -34,11 +35,12 @@ export class LoginPageComponent implements OnInit {
     (this.loginservice.authenticate(this.emailId, this.password).subscribe(
            
       data => {
-        console.log(data);
-        
+        console.log(data);        
         if(data){ 
           this.decodedToken = this.checkToken(JSON.stringify(data));
-      
+          localStorage.setItem('token',data.token);
+          localStorage.setItem('emailId',this.decodedToken.sub)
+          console.log(this.decodedToken);
           if(this.decodedToken.role === "buyer"){
             this.router.navigate(['./buyer-dashboard', {emailId:this.emailId}]);
           }
@@ -47,6 +49,9 @@ export class LoginPageComponent implements OnInit {
             this.router.navigate(['./seller-dashboard', {emailId:this.emailId}]);
           }
         }
+      },
+      error=>{
+        this.notRegistered=true;
       }
     ));
   }

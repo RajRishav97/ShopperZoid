@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 export class SearchComp{
   productName: string;
@@ -18,40 +19,48 @@ export class AddProductService {
   addProduct(product:any){
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type':  'application/json'
+        'Content-Type':  'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
       })
     };
-    console.log(product);    
-    return this.http.post<any>('http://15.206.62.131:8080/product/api/v1/product',JSON.stringify(product),httpOptions);
+    console.log(product);   
+    console.log(httpOptions); 
+    return this.http.post<any>(environment.addProductUrl,JSON.stringify(product),httpOptions);
   }
 
   addBook(book:any){
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type':  'application/json'
+        'Content-Type':  'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
       })
     };
-    return this.http.post<any>('http://15.206.62.131:8080/product/api/v1/book',JSON.stringify(book),httpOptions);
+    return this.http.post<any>(environment.addBookUrl,JSON.stringify(book),httpOptions);
   }
 
  searchProduct(productName):any{
   const httpOptions = {
     headers: new HttpHeaders({
-      'Content-Type':  'application/json'
+      'Content-Type':  'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
     })};
-   return this.http.post<any>(`http://15.206.62.131:8080/product/api/v1/product/details?productName=${productName}`,httpOptions);
+    console.log(httpOptions);
+    
+   return this.http.post<any>(environment.searchProductUrl+`${productName}`,httpOptions);
  } 
 
  updateProduct(product,seller){
   const httpOptions = {
     headers: new HttpHeaders({
-      'Content-Type':  'application/json'
+      'Content-Type':  'application/json',
+      'Authorization': 'Bearer ' + localStorage.getItem('token')
     })};
     console.log(seller);
     console.log(product);
     
     
-   return this.http.put<any>(`http://15.206.62.131:8080/product/api/v1/product?productName=${product.productName}`,JSON.stringify(seller),httpOptions);
+    
+   return this.http.put<any>(environment.updateProductUrl+`${product.productName}`,JSON.stringify(seller),httpOptions);
  }
 
 

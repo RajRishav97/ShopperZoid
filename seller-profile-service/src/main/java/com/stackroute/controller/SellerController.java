@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/v1/")
-@CrossOrigin(value = "*")
+@CrossOrigin(value = "*", allowedHeaders = "*")
 public class SellerController {
 
     private SellerService sellerService;
@@ -25,10 +25,6 @@ public class SellerController {
 
     private static ResponseEntity responseEntity;
 
-//    @Autowired
-//    public SellerController(SellerService sellerService) {
-//        this.sellerService = sellerService;
-//    }
 
     @Autowired
     public SellerController(SellerService sellerService, Producer producer) {
@@ -37,24 +33,19 @@ public class SellerController {
     }
 
     @PostMapping("seller")
-    public ResponseEntity<?> saveSeller(@RequestBody Seller seller) throws DatabaseConnectivityFailedException, SellerAlreadyExistsException, Exception{
+    public ResponseEntity<?> saveSeller(@RequestBody SellerDto sellerDto) throws DatabaseConnectivityFailedException, SellerAlreadyExistsException, Exception{
+
+        Seller seller=new Seller();
+        seller.setSellerEmail(sellerDto.getSellerEmail());
+        seller.setSellerName(sellerDto.getSellerName());
+        seller.setSellerPhone(sellerDto.getSellerPhone());
+
         Seller savedSeller = sellerService.saveSeller(seller);
-        SellerDto sellerDto=new SellerDto();
-        sellerDto.setSellerEmail(seller.getSellerEmail());
-        sellerDto.setSellerName(seller.getSellerName());
-        sellerDto.setSellerPhone(seller.getSellerPhone());
-        sellerDto.setPassword(seller.getPassword());
-        sellerDto.setRole(seller.getRole());
 
         SellerRecomDto sellerRecomDto=new SellerRecomDto();
         sellerRecomDto.setSellerEmail(seller.getSellerEmail());
         sellerRecomDto.setSellerName(seller.getSellerName());
         sellerRecomDto.setSellerPhone(seller.getSellerPhone());
-        sellerRecomDto.setSellerAddress(seller.getSellerAddress());
-        sellerRecomDto.setSellerRating(seller.getSellerRating());
-        sellerRecomDto.setSellerGstIn(seller.getSellerGstIn());
-        sellerRecomDto.setSellerProducts(seller.getSellerProducts());
-        sellerRecomDto.setSellerRating(seller.getSellerRating());
 
         responseEntity = new ResponseEntity<Seller>(savedSeller, HttpStatus.CREATED);
         this.producer.sendMessage(sellerDto);
@@ -65,7 +56,6 @@ public class SellerController {
     @GetMapping("sellers")
     public ResponseEntity<?> getAllSeller() throws DatabaseConnectivityFailedException, Exception{
         List<Seller> allSeller = sellerService.getAllSeller();
-//      this.producer.sendMessage(allSeller);
         responseEntity = new ResponseEntity<List<Seller>>(sellerService.getAllSeller(),HttpStatus.OK);
         return responseEntity;
     }

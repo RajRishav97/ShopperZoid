@@ -16,10 +16,10 @@ public class Producer {
     private static final Logger logger= LoggerFactory.getLogger(Producer.class);
 
     @Value("${TOPIC_BUYER_DTO}")
-    private static String TOPIC_BUYER_DTO;
+    private  String buyerTopic;
 
     @Value("${TOPIC_BUYER_RECOM_DTO}")
-    private static String TOPIC_BUYER_RECOM_DTO;
+    private  String buyerRecomTopic;
 
     @Autowired
     private KafkaTemplate<String, BuyerDto> kafkaTemplate;
@@ -29,11 +29,11 @@ public class Producer {
 
     public void sendMessageBuyerDto( BuyerDto buyerDto){
         logger.info(String.format("#### -> Producing message -> %s",buyerDto));
-        kafkaTemplate.send(TOPIC_BUYER_DTO,buyerDto);
+        kafkaTemplate.send(buyerTopic,buyerDto);
     }
 
     public void sendMessageBuyerRecomDto(BuyerRecomDto buyerRecomDto){
         logger.info(String.format("#### -> Producing message -> %s",buyerRecomDto));
-        kafkaTemplate1.send(TOPIC_BUYER_RECOM_DTO,buyerRecomDto);
+        kafkaTemplate1.send(buyerRecomTopic,buyerRecomDto);
     }
 }

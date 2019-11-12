@@ -1,3 +1,44 @@
+
+a {
+    color: #92badd;
+    display: inline-block;
+    text-decoration: none;
+    font-weight: 400;
+ }
+ h2 {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: inline-block;
+    margin: 40px 8px 10px 8px;
+    color: #cccccc;
+ }
+ h3 {
+    color: black;
+ }
+ /* STRUCTURE */
+ .wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    min-height: 100%;
+    padding: 20px;
+    margin-top: 2%;
+ }
+ .register-right {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    min-height: 100%;
+    padding: 20px;
+    margin-top: 8%;
+ }
+
 .row {
     display: flex;
     justify-content: center;
@@ -5,7 +46,48 @@
 }
 
 .register {
-    background: -webkit-linear-gradient(left, #1c1b25, #d8860be8);
+    background: -webkit-linear-gradient(left, #919692, #272726e8);
+    margin-top: 1%;
+    padding: 3%;
+}
+
+.register-left {
+    text-align: center;
+    color: #fff;
+    margin-top: 10%;
+}
+
+.register-left input {
+    border: none;
+    border-radius: 1.5rem;
+    padding: 2%;
+    width: 60%;
+    background: #f8f9fa;
+    font-weight: bold;
+    color: #383d41;
+    margin-top: 30%;
+    margin-bottom: 3%;
+    cursor: pointer;
+}
+
+.register-right {
+    background: #f8f9fa;
+    border-top-left-radius: 10% 50%;
+    border-bottom-left-radius: 10% 50%;
+    margin-right: 5%;
+    /* display: flex;
+    justify-content: center;
+    align-content: center; */
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.register {
+    background: -webkit-linear-gradient(left, #919692, #272726e8);
     margin-top: 1%;
     padding: 3%;
 }
@@ -39,7 +121,7 @@
 }
 
 .register-left img {
-    margin-top: 15%;
+    margin-top: 55%;
     margin-bottom: 5%;
     width: 75%;
     -webkit-animation: mover 2s infinite alternate;
@@ -255,4 +337,8 @@ fieldset[disabled] .btn-google.focus {
 .btn-google .badge {
     color: #dd4b39;
     background-color: #fff
+}
+
+.btnRegister{
+    background-color: #272726e8;
 }

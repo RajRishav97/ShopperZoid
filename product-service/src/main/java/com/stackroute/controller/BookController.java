@@ -4,6 +4,7 @@ import com.stackroute.domain.Book;
 import com.stackroute.domain.Seller;
 import com.stackroute.exception.ProductAlreadyExistsException;
 import com.stackroute.exception.ProductNotExistsException;
+import com.stackroute.kafka.BookRecomDto;
 import com.stackroute.service.BookService;
 import com.stackroute.service.Producer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,18 @@ public class BookController {
     public ResponseEntity<?> saveProduct(@RequestBody Book product) throws ProductAlreadyExistsException {
         Book product1 = productService.saveProduct(product);
         ResponseEntity responseEntity = new ResponseEntity(product1, HttpStatus.CREATED);
+        BookRecomDto bookRecomDto=new BookRecomDto();
+        bookRecomDto.setBookISBN(product.getBookISBN());
+        bookRecomDto.setBookAuthor(product.getBookAuthor());
+        bookRecomDto.setBookCategory(product.getBookCategory());
+        bookRecomDto.setBookSubcategory(product.getBookSubcategory());
+        bookRecomDto.setBookTitle(product.getBookTitle());
+        bookRecomDto.setBookPublisher(product.getBookPublisher());
+        bookRecomDto.setSellerEmail(product.getSellers().get(0).getSellerId());
+        bookRecomDto.setBookPrice(product.getSellers().get(0).getProductPrice());
+        bookRecomDto.setBookStock(product.getSellers().get(0).getProductStock());
         this.producer.sendBook(product1);
+        this.producer.sendBookRecom(bookRecomDto);
         return responseEntity;
     }
 

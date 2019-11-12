@@ -118,20 +118,20 @@ public class BuyerServiceImpl implements BuyerService {
 
             /*implementation of kafka listener of ordered-products*/
 
-            @KafkaListener(topics = "  ", groupId = "ordered-products-id",containerFactory = "kafkaListenerContainerFactory")
-            public void consumeOrderedProducts(OrderedProductsDto orderedProductsDto){
-
-
-            }
+//            @KafkaListener(topics = "  ", groupId = "ordered-products-id",containerFactory = "kafkaListenerContainerFactory")
+//            public void consumeOrderedProducts(OrderedProductsDto orderedProductsDto){
+//
+//
+//            }
 
 
             /*implementation of kafka listener of returned-products*/
 
-            @KafkaListener(topics = "  ", groupId = "returned-products-id",containerFactory = "kafkaListenerContainerFactory")
-            public void consumeReturned(ReturnedProductsDto returnedProductsDto){
+            // @KafkaListener(topics = "  ", groupId = "returned-products-id",containerFactory = "kafkaListenerContainerFactory")
+            // public void consumeReturned(ReturnedProductsDto returnedProductsDto){
 
 
-            }
+            // }
 
 
 

@@ -1,10 +1,11 @@
 <mat-drawer-container class="main-container">
-  <mat-drawer mode="side" opened>
-    <button mat-raised-button (click)="gotToBuyerProfile()">Buyer Profile</button>
-  </mat-drawer>
 
   <mat-drawer-content>
-    <section class="container mt-5">
+    <section class="container mt-4">
+
+      <button mat-raised-button (click)="gotToBuyerProfile()">Profile</button>
+
+      <br><br>
       <app-search-bar> </app-search-bar>
       
       <h2>Trending Deals</h2>
@@ -44,7 +45,7 @@
         </a>
       </div>
     
-      <h2>Custom Recommendations Tailored for You</h2>
+      <h2>Recommendations Tailored For You</h2>
       <div id="carousel-recommendation" class="carousel slide" data-ride="carousel">
         <div class="carousel-inner" role="listbox">
           <div class="carousel-item active">

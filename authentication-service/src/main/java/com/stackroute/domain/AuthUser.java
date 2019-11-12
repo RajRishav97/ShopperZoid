@@ -1,12 +1,14 @@
 package com.stackroute.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 
 @Entity
 @Table(name = "user")
+@Data
 public class AuthUser {
 
 	@Id
@@ -20,33 +22,5 @@ public class AuthUser {
 	private String password;
 	@Column
 	private String role;
-
-	public String getEmailId() {
-		return emailId;
-	}
-
-	public void setEmailId(String emailId) {
-		this.emailId = emailId;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
-
-	public long getId() {
-		return id;
-	}
 
 }

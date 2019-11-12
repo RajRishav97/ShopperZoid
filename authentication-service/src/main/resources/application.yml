@@ -1,6 +1,5 @@
 server:
   port: 8105
-spring.application.name : authentication-service
 spring:
   security:
     oauth2:
@@ -28,6 +27,8 @@ spring:
             authorizationUri: https://www.facebook.com/v3.0/dialog/oauth
             tokenUri: https://graph.facebook.com/v3.0/oauth/access_token
             userInfoUri: https://graph.facebook.com/v3.0/me?fields=id,first_name,middle_name,last_name,name,email,verified,is_verified,picture.width(250).height(250)
+  application:
+    name: authentication-service
 
 authorizedRedirectUris:
   - http://localhost:3000/oauth2/redirect

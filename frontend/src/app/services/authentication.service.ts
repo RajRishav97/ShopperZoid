@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { HttpHeaders } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 export class User{
   constructor(
@@ -48,17 +49,18 @@ export class AuthenticationService {
     //    )
 
     //  );
-    return this.httpClient.post<any>('http://15.206.62.131:8080/AuthUser/authenticate',JSON.stringify(this.user),httpOptions);
+    return this.httpClient.post<any>(environment.authenticateUrl,JSON.stringify(this.user),httpOptions);
     }
 
 
   isUserLoggedIn() {
-    let user = sessionStorage.getItem('emailId')
+    let user = localStorage.getItem('emailId')
     return !(user === null)
   }
 
   logOut() {
-    sessionStorage.removeItem('emailId')
+    localStorage.removeItem('emailId');
+    localStorage.removeItem('token');
   }
 
   login(emailId, password, loginType){
@@ -71,7 +73,7 @@ export class AuthenticationService {
        'Content-Type':  'application/json'
      })
    };
-    return this.httpClient.post<any>('http://localhost:8080/AuthUser/login',JSON.stringify(this.loginUser),httpOptions);
+    return this.httpClient.post<any>(environment.loginUrl,JSON.stringify(this.loginUser),httpOptions);
  }
 }
 

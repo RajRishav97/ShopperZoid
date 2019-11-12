@@ -1,9 +1,6 @@
 package com.stackroute.config;
 
-import com.stackroute.kafka.BuyerRecomDto;
-import com.stackroute.kafka.NewSellerDto;
-import com.stackroute.kafka.ProductRecomDto;
-import com.stackroute.kafka.SellerRecomDto;
+import com.stackroute.kafka.*;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -26,7 +23,7 @@ public class KafkaBuyerConsumerConfig {
     public ConsumerFactory<String, BuyerRecomDto> consumeBuyerFactory(){
         Map<String,Object> props= new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,"localhost:9092");
-        props.put(ConsumerConfig.GROUP_ID_CONFIG,"user-id");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG,"buyer-id");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(),new JsonDeserializer<>(BuyerRecomDto.class));
@@ -57,7 +54,7 @@ public class KafkaBuyerConsumerConfig {
     public ConsumerFactory<String, ProductRecomDto> consumeProductFactory(){
         Map<String,Object> props= new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,"localhost:9092");
-        props.put(ConsumerConfig.GROUP_ID_CONFIG,"new-seller-id");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG,"product-id");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(),new JsonDeserializer<>(ProductRecomDto.class));
@@ -74,7 +71,7 @@ public class KafkaBuyerConsumerConfig {
     public ConsumerFactory<String, NewSellerDto> consumeNewSellerFactory(){
         Map<String,Object> props= new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,"localhost:9092");
-        props.put(ConsumerConfig.GROUP_ID_CONFIG,"product-id");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG,"new-seller-id");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(),new JsonDeserializer<>(NewSellerDto.class));
@@ -86,4 +83,22 @@ public class KafkaBuyerConsumerConfig {
         factory.setConsumerFactory(consumeNewSellerFactory());
         return factory;
     }
+
+    @Bean
+    public ConsumerFactory<String, BookRecomDto> consumeBookFactory(){
+        Map<String,Object> props= new HashMap<>();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,"localhost:9092");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG,"book-id");
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(),new JsonDeserializer<>(BookRecomDto.class));
+    }
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, BookRecomDto> kafkaListenerContainerFactory4(){
+        ConcurrentKafkaListenerContainerFactory<String, BookRecomDto>
+                factory= new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumeBookFactory());
+        return factory;
+    }
+
 }

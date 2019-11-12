@@ -31,6 +31,7 @@ public class Book {
     private String bookISBN;
     private String bookTitle;
     private String bookAuthor;
+    private String bookImage;
 //    private String bookGenre;
     private String bookDesc;
     private String bookPublisher;

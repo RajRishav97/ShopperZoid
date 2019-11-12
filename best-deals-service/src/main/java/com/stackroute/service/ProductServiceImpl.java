@@ -145,51 +145,50 @@ public class ProductServiceImpl implements ProductService {
         }
         Product product=productRepository.findByProductName(productName).get(0);
         List<Seller> sellers=product.getSellers();
-        double maxPrice,minPrice,buyPercentage,sRatings,invScore,normPrice;
-        maxPrice=minPrice=sellers.get(0).getProductPrice();
-        if (sellers.get(1).getProductPrice() > sellers.get(0).getProductPrice())
-        {
-            maxPrice = sellers.get(1).getProductPrice();
-            minPrice = sellers.get(0).getProductPrice();
-        }
-        else
-        {
-            minPrice = sellers.get(1).getProductPrice();
-            maxPrice = sellers.get(0).getProductPrice();
-        }
 
-        for (int i = 2; i<sellers.size(); i++)
-        {
-            if (sellers.get(i).getProductPrice() >  maxPrice)
-                maxPrice = sellers.get(i).getProductPrice();
+        if(sellers.size()==1)
+            return sellers;
+        else {
+            double maxPrice, minPrice, buyPercentage, sRatings, invScore, normPrice;
+            maxPrice = minPrice = sellers.get(0).getProductPrice();
+            if (sellers.get(1).getProductPrice() > sellers.get(0).getProductPrice()) {
+                maxPrice = sellers.get(1).getProductPrice();
+                minPrice = sellers.get(0).getProductPrice();
+            } else {
+                minPrice = sellers.get(1).getProductPrice();
+                maxPrice = sellers.get(0).getProductPrice();
+            }
 
-            else if (sellers.get(i).getProductPrice() <  minPrice)
-                minPrice = sellers.get(i).getProductPrice();
-        }
+            for (int i = 2; i < sellers.size(); i++) {
+                if (sellers.get(i).getProductPrice() > maxPrice)
+                    maxPrice = sellers.get(i).getProductPrice();
 
-        for(int i=0;i<sellers.size();i++){
-            if(sellers.get(i).getProductSold()!=0) {
-                buyPercentage=100 * (sellers.get(i).getProductSold() - sellers.get(i).getProductReturned()) / sellers.get(i).getProductSold();
+                else if (sellers.get(i).getProductPrice() < minPrice)
+                    minPrice = sellers.get(i).getProductPrice();
             }
-            else {
-                buyPercentage=100.0;
+
+            for (int i = 0; i < sellers.size(); i++) {
+                if (sellers.get(i).getProductSold() != 0) {
+                    buyPercentage = 100 * (sellers.get(i).getProductSold() - sellers.get(i).getProductReturned()) / sellers.get(i).getProductSold();
+                } else {
+                    buyPercentage = 100.0;
+                }
+                sRatings = 20 * sellers.get(i).getSellerRatings();
+                if ((sellers.get(i).getProductStock() + sellers.get(i).getProductSold()) != 0) {
+                    invScore = (100 * (sellers.get(i).getProductStock()) / (sellers.get(i).getProductStock() + sellers.get(i).getProductSold()));
+                } else {
+                    invScore = 100.0;
+                }
+                normPrice = (100 * (maxPrice - sellers.get(i).getProductPrice()) / (maxPrice - minPrice));
+                sellers.get(i).setSellerIndex(0.2 * buyPercentage + 0.25 * sRatings + 0.2 * invScore + 0.35 * normPrice);
             }
-            sRatings=20*sellers.get(i).getSellerRatings();
-            if((sellers.get(i).getProductStock()+sellers.get(i).getProductSold())!=0) {
-                invScore=(100 * (sellers.get(i).getProductStock()) / (sellers.get(i).getProductStock() + sellers.get(i).getProductSold()));
-            }
-            else {
-                invScore=100.0;
-            }
-            normPrice=(100*(maxPrice-sellers.get(i).getProductPrice())/(maxPrice-minPrice));
-            sellers.get(i).setSellerIndex(0.2*buyPercentage+0.25*sRatings+0.2*invScore+0.35*normPrice);
+            product.setSellers(sellers);
+            //this.updateProduct(product);
+            List<Seller> sortedSellers = sellers.stream()
+                    .sorted(Comparator.comparing(Seller::getSellerIndex).reversed())
+                    .collect(Collectors.toList());
+            return sortedSellers;
         }
-        product.setSellers(sellers);
-        //this.updateProduct(product);
-        List<Seller> sortedSellers = sellers.stream()
-                .sorted(Comparator.comparing(Seller::getSellerIndex).reversed())
-                .collect(Collectors.toList());
-        return sortedSellers;
     }
 
     //Implementation of Buying product
@@ -226,6 +225,15 @@ public class ProductServiceImpl implements ProductService {
     @KafkaListener(topics = "product-Info", groupId = "product-id",containerFactory = "kafkaListenerContainerFactory")
     public void consumeSeller(@Payload Product product){
         System.out.println(product.toString());
-        productRepository.save(product);
+        if(productRepository.findByProductName(product.getProductName()).isEmpty()){
+            System.out.println(product);
+            productRepository.save(product);
+        }
+        else{
+            Product getProduct = productRepository.findByProductName(product.getProductName()).get(0);
+            getProduct.setProductName(product.getProductName());
+            getProduct.setSellers(product.getSellers());
+            productRepository.save(getProduct);
+        }
     }
 }

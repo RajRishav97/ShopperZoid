@@ -41,11 +41,6 @@ export class UpdateProductComponent implements OnInit {
     this.route.paramMap.subscribe((params:ParamMap)=> {
       this.eMail = params.get('eMail');});
       console.log(this.eMail);
-      
-
-      this.searchForm=this._formBuilder.group({
-        name: ['', Validators.required]
-      });
 
       this.updateForm=this._formBuilder.group({
         price: ['', Validators.required],
@@ -53,18 +48,18 @@ export class UpdateProductComponent implements OnInit {
       });
   }
 
-  doSearch(){
-    console.log(this.searchForm.value);
+  doSearch(name){
+    console.log(name);
     
-   this.addProduct.searchProduct(this.searchForm.value.name).subscribe(data=>{
+   this.addProduct.searchProduct(name).subscribe(data=>{
      if(data){
        this.valueSearch=true;
+       this.productDoesntExists=false;
        this.product.productName=data.productName;
        this.desc=data.productDescription;
-     }
-     else{
-       this.productDoesntExists=true;
-     }
+     }},_error=>{
+    this.productDoesntExists=true;
+    this.valueSearch=false;
    })
 
   }

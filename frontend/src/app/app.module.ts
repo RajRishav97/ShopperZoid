@@ -33,13 +33,21 @@ import { ProductDetailsComponent } from './product-details/product-details.compo
 import { UpdateProductComponent } from './update-product/update-product.component';
 
 import { BuyerRegistrationService } from './services/buyer-registration.service';
-import { BuyerProfileService } from './services/buyer-profile.service';
-import { SocialLoginService } from './services/social-login.service';
-import { FileUploadComponent } from './file-upload/file-upload.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-
-
+import { FileUploadComponent } from './file-upload/file-upload.component';
+import { BuyerProfileService } from './services/buyer-profile.service';
+import { SocialLoginService } from './services/social-login.service';
+import { LoggedInNavbarComponent } from './logged-in-navbar/logged-in-navbar.component';
+import { IncartProductsComponent } from './incart-products/incart-products.component';
+import { PaymentComponent } from './payment/payment.component';
+import { PaymentService } from './services/payment.service';
+import { AngularFireModule } from '@angular/fire';
+import { environment } from 'src/environments/environment';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import {MatButtonModule} from '@angular/material/button';
 
 
 const config = new AuthServiceConfig([
@@ -58,9 +66,9 @@ export function provideConfig() {
 }
 
 @NgModule({
-  declarations: [AppComponent, SearchBarComponent, TrendingDealsComponent, HomeComponent, SellerDashboardComponent, LoginPageComponent, SellerRegistrationComponent, BestDealsComponent, BuyerDashboardComponent, BuyerRegistrationComponent, SellerDashboardInventoryComponent, AddProductComponent, ProductDetailsComponent, UpdateProductComponent, BuyerProfileComponent, NavbarComponent, PageNotFoundComponent, FileUploadComponent],
-  imports: [Ng2CarouselamosModule, BrowserModule, AppRoutingModule, FormsModule, BrowserAnimationsModule, HttpClientModule, ReactiveFormsModule, ShopperZoidMaterialModule, SocialLoginModule],
-  providers: [ProductService, SellerDashboardService, AuthenticationService, SellerRegistrationService, BuyerRegistrationService, BuyerProfileService,
+  declarations: [AppComponent, SearchBarComponent, TrendingDealsComponent, HomeComponent, SellerDashboardComponent, LoginPageComponent, SellerRegistrationComponent, BestDealsComponent, BuyerDashboardComponent, BuyerRegistrationComponent, SellerDashboardInventoryComponent, AddProductComponent, ProductDetailsComponent, UpdateProductComponent, BuyerProfileComponent, NavbarComponent, PageNotFoundComponent, FileUploadComponent, IncartProductsComponent, LoggedInNavbarComponent, PaymentComponent],
+  imports: [MatButtonModule,Ng2CarouselamosModule, BrowserModule, AppRoutingModule, FormsModule, BrowserAnimationsModule, HttpClientModule, ReactiveFormsModule, ShopperZoidMaterialModule, SocialLoginModule, AngularFirestoreModule, AngularFireModule.initializeApp(environment.firebaseConfig), AngularFireDatabaseModule, AngularFireAuthModule],
+  providers: [ProductService, SellerDashboardService, AuthenticationService, SellerRegistrationService, BuyerRegistrationService, BuyerProfileService, SocialLoginService, PaymentService,
    {
     provide: AuthServiceConfig,
     useFactory: provideConfig

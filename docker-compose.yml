@@ -31,6 +31,7 @@ services:
     ports:
       - 8080:8080
 
+
   mongo:
     image: mongo:latest
     container_name: mongo
@@ -63,7 +64,6 @@ services:
     hostname: localhost
     environment:
       MYSQL_ROOT_PASSWORD: root
-#      MYSQL_DATABASE: newDB
       MYSQL_USER: root
       MYSQL_PASSWORD: root
     volumes:
@@ -80,6 +80,7 @@ services:
     hostname: localhost
     ports:
       - 8105:8105
+
   zookeeper:
     image: wurstmeister/zookeeper
     ports:
@@ -87,6 +88,7 @@ services:
     container_name: zookeeper
     network_mode: "host"
     hostname: localhost
+
   kafka:
     image: wurstmeister/kafka:latest
     ports:
@@ -150,16 +152,13 @@ services:
       - buyer-profile-service
       - product-service
 
-
-
   angular-frontend:
     build: frontend/
-    container_name: frontend
     hostname: localhost
     ports:
-      - "4200:80"
-    expose:
-      - "4200"
+      - "4200:4200"
+    network_mode: "host"
+
 
   product-service:
     build: product-service/
@@ -188,3 +187,41 @@ services:
       - eureka-server
       - config-server
       - api-gateway
+
+  order-service:
+    build: order-service/
+    container_name: order-service
+    network_mode: "host"
+    hostname: localhost
+    ports:
+      - "8100:8100"
+    depends_on:
+      - config-server
+      - eureka-server
+      - api-gateway
+      - mongo
+      - kafka
+
+  mapping-service:
+    build: buyer-To-seller-service/
+    container_name: mapping-service
+    network_mode: "host"
+    hostname: localhost
+    ports:
+      - "8120:8120"
+    depends_on:
+      - mongo
+      - kafka
+
+  payment-service:
+    image: payment-service
+    build: payment-service/
+    container_name: payment-service
+    restart: always
+    network_mode: "host"
+    hostname: localhost
+    ports:
+      - "8200:8200"
+    depends_on:
+      - mysql
+

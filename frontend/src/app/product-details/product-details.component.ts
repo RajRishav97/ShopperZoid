@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductDetailsService } from '../services/product-details.service';
 import { DealsService } from '../services/deals.service';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { SellerDashboardService } from '../services/seller-dashboard.service';
+import { IncartProducts } from '../incart-products/incartProducts';
 
 
 @Component({
@@ -17,7 +18,15 @@ export class ProductDetailsComponent implements OnInit {
   private searchProductName: string;
   private sellerId: string;
 
-  constructor(private _sellerDashboardService: SellerDashboardService, private route: ActivatedRoute, private _dealsService : DealsService, private _productDetailsService: ProductDetailsService) { }
+  private incartProduct: IncartProducts = new IncartProducts();
+  private showSuccessMsg: boolean;
+  private total = 0;
+
+  constructor(private router: Router, 
+    private _sellerDashboardService: SellerDashboardService, 
+    private route: ActivatedRoute, 
+    private _dealsService : DealsService, 
+    private _productDetailsService: ProductDetailsService) { }
 
   ngOnInit() {
     // this._productDetailsService.getProductInfo().subscribe(response=>
@@ -26,7 +35,8 @@ export class ProductDetailsComponent implements OnInit {
     //     console.log(this.product);
     //   }
     // );
-    
+    this._productDetailsService.getInProductList();
+
     this.route.paramMap.subscribe((params:ParamMap)=> 
       {
         this.sellerId = params.get('sellerId');
@@ -50,12 +60,29 @@ export class ProductDetailsComponent implements OnInit {
     );
   }
 
-  // addToCart(){
-  //   this._productDetailsService.addProductToCart(this.product).subscribe();
-  // }
+  addToCart(){
+    // this._productDetailsService.addProductToCart(this.product).subscribe();
+    console.log("Inside addToCart() : ");
+    console.log(this.product);
 
-  // addToWishlist(){
-  //   this._productDetailsService.addProductToWishlist(this.product).subscribe();
-  // }
+    this.incartProduct.productBrandName = this.product.productBrandName;
+    this.incartProduct.productDescription = this.product.productDescription;
+    this.incartProduct.productPrice = this.seller.productPrice;
+    this.incartProduct.productImage = this.product.productImage;
+    this.incartProduct.productQuantityIncart = 1;
+    this.incartProduct.productName = this.product.productName;
+    this.incartProduct.productId = this.product.productId;
+    this.incartProduct.inCartTotal = 0;
+    this.incartProduct.userEmail=localStorage.getItem('emailId');
+    this._productDetailsService.insertInProductList(this.product, this.seller, this.incartProduct);
+    this.showSuccessMsg = true;
+
+    setTimeout(() => this.showSuccessMsg = false,3000);
+    // this.router.navigate(['./app-incart-products', { product:this.product }]);
+  }
+
+  addToWishlist(){
+    // this._productDetailsService.addProductToWishlist(this.product).subscribe();
+  }
 
 }

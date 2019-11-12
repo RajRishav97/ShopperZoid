@@ -28,6 +28,7 @@ public class ProductServiceImpl implements ProductService {
  */
     @Override
     public Product getProductDetails(String productName) throws ProductNotExistsException {
+            productName = productName.toLowerCase();
             if(productRepository.findByProductName(productName)==null){
                 throw new ProductNotExistsException("Product does not exists..");
             }
@@ -41,6 +42,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public Product saveProduct(Product product) throws ProductAlreadyExistsException {
+        product.setProductName(product.getProductName().toLowerCase());
         if(productRepository.findByProductName(product.getProductName())!= null){
             throw new ProductAlreadyExistsException("Product does not exists..");
         }
@@ -52,6 +54,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public boolean deleteProduct(String productName) throws ProductNotExistsException {
+        productName = productName.toLowerCase();
         if(productRepository.findByProductName(productName)==null){
             throw new ProductNotExistsException("Product does not exists..");
         }
@@ -64,6 +67,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public Product updateProduct(Product product) throws ProductNotExistsException {
+        product.setProductName(product.getProductName().toLowerCase());
         if(productRepository.findByProductName(product.getProductName())==null){
             throw new ProductNotExistsException("Product does not exists..");
         }
@@ -74,6 +78,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public boolean addSeller(String productName, Seller seller) throws ProductNotExistsException {
+        productName = productName.toLowerCase();
         if(productRepository.findByProductName(productName)==null){
             throw new ProductNotExistsException("Product does not exists..");
         }
@@ -82,6 +87,7 @@ public class ProductServiceImpl implements ProductService {
         sellerList.add(seller);
         product.setSellers(sellerList);
         Product product1 = updateProduct(product);
+        this.producer.sendProduct(product1);
         NewSellerDto newSellerDto = new NewSellerDto();
         newSellerDto.setProductName(product1.getProductName());
         newSellerDto.setSellerEmail(seller.getSellerId());
@@ -132,6 +138,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public List<Seller> getSellerListOfProduct(String productName) throws ProductNotExistsException {
+        productName = productName.toLowerCase();
         if(productRepository.findByProductName(productName)==null){
             throw new ProductNotExistsException("Product does not exists..");
         }
@@ -145,6 +152,7 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public boolean deleteSeller(String productName, String sellerId) throws ProductNotExistsException {
+        productName = productName.toLowerCase();
         if(productRepository.findByProductName(productName)==null){
             throw new ProductNotExistsException("Product does not exists..");
         }

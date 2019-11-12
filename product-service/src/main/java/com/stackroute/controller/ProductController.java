@@ -25,7 +25,7 @@ import java.util.List;
  * RequestMapping annotation maps HTTP requests to handler methods
  */
 @RequestMapping(value = "api/v1")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*",allowedHeaders = "*")
 public class ProductController {
 
     private ProductService productService;
@@ -60,6 +60,7 @@ public class ProductController {
 
     @PostMapping("product/details")
     public ResponseEntity<?> getProductDetails(@RequestParam("productName") String productId) throws ProductNotExistsException {
+        System.out.println(productId);
         Product product1 = productService.getProductDetails(productId);
         ProductInfoResponseDTO productInfoResponseDTO= new ProductInfoResponseDTO();
         productInfoResponseDTO.setProductName(product1.getProductName());

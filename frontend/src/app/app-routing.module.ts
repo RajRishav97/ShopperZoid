@@ -13,7 +13,10 @@ import { AddProductComponent } from './add-product/add-product.component';
 import { ProductDetailsComponent } from './product-details/product-details.component';
 import { UpdateProductComponent } from './update-product/update-product.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-
+import { IncartProductsComponent } from './incart-products/incart-products.component';
+import { PaymentService } from './services/payment.service';
+import { PaymentComponent } from './payment/payment.component';
+//import { PaymentComponent } from './payment/payment.component';
 
 const routes: Routes = [
 
@@ -29,7 +32,9 @@ const routes: Routes = [
   { path: 'add-product', component: AddProductComponent },
   { path: 'product-details', component: ProductDetailsComponent },
   { path: 'update-product', component: UpdateProductComponent },
-
+  { path: 'app-incart-products',component:IncartProductsComponent},
+  { path: 'payment', component: PaymentComponent},
+  
   // Routes to be placed at the last
   { path: '', component: HomeComponent },
   { path: '**', component: PageNotFoundComponent }
@@ -45,4 +50,4 @@ export class AppRoutingModule {}
 
 export const routingComponents = [HomeComponent, SellerDashboardComponent,
   BestDealsComponent, LoginPageComponent, BuyerDashboardComponent, 
-  AddProductComponent];
+  AddProductComponent,IncartProductsComponent];

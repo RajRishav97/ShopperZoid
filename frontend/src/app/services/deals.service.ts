@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment'
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-Type':'application/json'})
@@ -12,7 +13,7 @@ export class DealsService {
   private productsUrl: string;
  
   constructor(private http: HttpClient) {
-    this.productsUrl = 'http://15.206.62.131:8086/api/v1/products';
+    this.productsUrl = environment.dealsUrl;
   }
  
   public findAll(): any {
@@ -27,14 +28,18 @@ export class DealsService {
   }
 
   public findProduct(productName) {
-    return this.http.get(`http://15.206.62.131:8086/api/v1/products/${productName}`);
+    var str=productName.toString().toLowerCase();
+    console.log(environment.findSellerByIdUrl+`${productName}`);
+    return this.http.get(environment.findSellerByIdUrl+`${str}`);
   }
 
   public findProductByName(productName){
-    return this.http.get(`http://15.206.62.131:8086/api/v1/product/name/${productName}`);
+    console.log(environment.findProductByNameUrl+`name/${productName}`);
+    return this.http.get(environment.findProductByNameUrl+`name/${productName}`);
   }
 
   public findSellerById(productName,sellerId){
-    return this.http.get(`http://15.206.62.131:8086/api/v1/products/${productName}/${sellerId}/`);
+    console.log(environment.findSellerByIdUrl+`${productName}/${sellerId}/`)
+    return this.http.get(environment.findSellerByIdUrl+`${productName}/${sellerId}/`);
   }
 }

@@ -2,6 +2,7 @@ package com.stackroute.config;
 
 import com.stackroute.domain.Book;
 import com.stackroute.domain.Product;
+import com.stackroute.kafka.BookRecomDto;
 import com.stackroute.kafka.NewSellerDto;
 import com.stackroute.kafka.ProductRecomDto;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -56,6 +57,15 @@ public class kafkaProducerConfig {
     }
 
     @Bean
+    public ProducerFactory<String, BookRecomDto> producerFactoryBookRecom(){
+        Map<String, Object> configProps = new HashMap<>();
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"localhost:9092");
+        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        return new DefaultKafkaProducerFactory<>(configProps);
+    }
+
+    @Bean
     public KafkaTemplate<String, Product> kafkaTemplateProduct(){
         return new KafkaTemplate<>(producerFactoryProduct());
     }
@@ -70,5 +80,8 @@ public class kafkaProducerConfig {
 
     @Bean
     public KafkaTemplate<String, NewSellerDto> kafkaTemplateNewSeller() {return new KafkaTemplate<>(producerFactoryNewSeller());}
+
+    @Bean
+    public KafkaTemplate<String, BookRecomDto> kafkaTemplateBookRecom() {return new KafkaTemplate<>(producerFactoryBookRecom());}
 
 }

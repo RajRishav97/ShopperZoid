@@ -36,6 +36,9 @@
         <module>seller-profile-service</module>
         <module>buyer-profile-service</module>
         <module>product-service</module>
+        <module>payment-service</module>
+        <module>order-service</module>
+        <module>buyer-To-seller-service</module>
     </modules>
 
     <dependencies>

@@ -7,7 +7,8 @@ import com.stackroute.kafka.BuyerDto;
 import com.stackroute.kafka.SellerDto;
 import com.stackroute.repository.AuthUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
+//import org.springframework.kafka.annotation.KafkaListener;
+//import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthUserService implements UserDetailsService {
-	
+
 	@Autowired
 	private AuthUserRepository authUserRepository;
 
@@ -31,7 +32,7 @@ public class AuthUserService implements UserDetailsService {
 		AuthUser user = authUserRepository.findByEmailId(username);
 			return JwtUserFactory.create(user);
 	}
-	
+
 	public AuthUser save(UserDTO user) {
 		AuthUser newUser = new AuthUser();
 		newUser.setEmailId(user.getEmailId());

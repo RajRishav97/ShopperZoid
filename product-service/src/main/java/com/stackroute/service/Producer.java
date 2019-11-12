@@ -3,6 +3,7 @@ package com.stackroute.service;
 
 import com.stackroute.domain.Book;
 import com.stackroute.domain.Product;
+import com.stackroute.kafka.BookRecomDto;
 import com.stackroute.kafka.NewSellerDto;
 import com.stackroute.kafka.ProductRecomDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ public class Producer {
 
     private static final String TOPIC_PRODUCT_RECOM="product-recomm-Info";
 
+    private static final String TOPIC_BOOK_RECOM="book-recom-Info";
+
     private static final String TOPIC_NEW_SELLER="product-new-seller";
 
     @Autowired
@@ -27,6 +30,9 @@ public class Producer {
 
     @Autowired
     private KafkaTemplate<String,ProductRecomDto> kafkaTemplateProductRecom;
+
+    @Autowired
+    private KafkaTemplate<String,BookRecomDto> kafkaTemplateBookRecom;
 
     @Autowired
     private KafkaTemplate<String,NewSellerDto> kafkaTemplateNewSeller;
@@ -42,6 +48,9 @@ public class Producer {
     public void sendProductRecom(ProductRecomDto productRecomDto) {kafkaTemplateProductRecom.send(TOPIC_PRODUCT_RECOM,productRecomDto);}
 
     public void sendNewSeller(NewSellerDto newSellerDto) {kafkaTemplateNewSeller.send(TOPIC_NEW_SELLER,newSellerDto);}
+
+    public void sendBookRecom(BookRecomDto bookRecomDto) {kafkaTemplateBookRecom.send(TOPIC_BOOK_RECOM,bookRecomDto);}
+
 
 
 }

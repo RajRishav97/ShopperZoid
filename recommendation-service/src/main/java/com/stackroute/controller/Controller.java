@@ -1,6 +1,7 @@
 package com.stackroute.controller;
 
 import com.stackroute.domain.*;
+import com.stackroute.exceptions.BookNotFoundException;
 import com.stackroute.exceptions.BuyerNotFoundException;
 import com.stackroute.exceptions.ProductNotFoundException;
 import com.stackroute.service.*;
@@ -25,6 +26,8 @@ public class Controller {
     CategoriesService categoriesService;
     @Autowired
     SubCategoriesService subCategoriesService;
+    @Autowired
+    BookService bookService;
 
 
     @GetMapping("buyers")
@@ -221,4 +224,30 @@ public class Controller {
         responseEntity = new ResponseEntity<String>("successfully created", HttpStatus.CREATED);
         return responseEntity;
     }
+
+    @GetMapping("books")
+    public ResponseEntity getAllBooks() {
+        return new ResponseEntity<>(bookService.getAll(), HttpStatus.OK);
+    }
+
+    @PostMapping("book")
+    public ResponseEntity saveBook(@RequestBody Book book){
+        ResponseEntity responseEntity;
+        bookService.saveBook(book);
+        responseEntity = new ResponseEntity<String>("successfully created", HttpStatus.CREATED);
+        return responseEntity;
+    }
+
+    @PutMapping("book")
+    public ResponseEntity<?> UpdateBook(@RequestBody Book book) throws Exception, BookNotFoundException {
+
+        Book updatedBook = bookService.updateBook(book);
+        return new ResponseEntity<>(updatedBook, HttpStatus.OK);
+    }
+
+    @DeleteMapping("book/{id}")
+    public ResponseEntity<?> deleteBookById(@PathVariable Long id) throws Exception, BookNotFoundException {
+        return new ResponseEntity<>(bookService.deleteBookById(id), HttpStatus.OK);
+    }
+
 }

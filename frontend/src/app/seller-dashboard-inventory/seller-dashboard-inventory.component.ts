@@ -58,6 +58,10 @@ export class SellerDashboardInventoryComponent implements OnInit {
     this.router.navigate(['./update-product', { eMail:this.eMail }]);
   }
 
+  goToSellerDashboard(){
+    this.router.navigate(['./seller-dashboard', { eMail:this.eMail }]);
+  }
+
   // updateProduct(){
   //   this.router.navigate(['./', { eMail:this.eMail }]);
   // }

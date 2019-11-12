@@ -13,6 +13,6 @@ public class SellerDto {
     private String SellerName;
     private long sellerPhone;
     private String password;
-    private String role;
+    private String role="seller";
 
 }

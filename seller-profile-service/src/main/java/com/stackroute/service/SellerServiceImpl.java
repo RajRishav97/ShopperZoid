@@ -1,12 +1,16 @@
 package com.stackroute.service;
 
+import com.stackroute.domain.Product;
 import com.stackroute.exceptions.DatabaseConnectivityFailedException;
 import com.stackroute.exceptions.SellerNotFoundException;
+import com.stackroute.kafka.ProductDto;
 import com.stackroute.kafka.SellerDto;
 import com.stackroute.repository.SellerRepository;
 import com.stackroute.domain.Seller;
 import com.stackroute.exceptions.SellerAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -110,5 +114,22 @@ public class SellerServiceImpl implements SellerService{
             throw new SellerNotFoundException();
         }
         return sellerRepository.findBySellerName(sellerName);
+    }
+
+    @KafkaListener(topics = "product-Info", groupId = "product-id", containerFactory = "kafkaListenerContainerFactory")
+    public void productDto(@Payload ProductDto productDto){
+        Product product = new Product();
+        product.setProductName(productDto.getProductName());
+        product.setProductBrandName(productDto.getProductBrandName());
+        product.setProductCategory(productDto.getProductCategory());
+        product.setProductDescription(productDto.getProductDescription());
+        product.setProductImage(productDto.getProductImage());
+        product.setProductPrice(productDto.getProductPrice());
+        product.setProductStock(productDto.getProductStock());
+        product.setProductSubCategory(productDto.getProductSubCategory());
+        Seller seller = sellerRepository.findById(productDto.getSellerEmail()).get();
+        seller.addInProduct(product);
+        sellerRepository.save(seller);
+
     }
 }

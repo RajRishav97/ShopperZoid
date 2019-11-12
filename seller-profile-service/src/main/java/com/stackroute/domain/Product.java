@@ -1,6 +1,7 @@
 package com.stackroute.domain;
 
 import lombok.*;
+import org.springframework.data.annotation.Id;
 
 import java.math.BigDecimal;
 
@@ -11,10 +12,12 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 public class Product {
-    private String productId;
     private String productName;
-    private String productImg;
-    private BigDecimal productPrice;
-    private long productQuantity;
-    private String productDesc;
+    private String productDescription;
+    private String productImage;
+    private String productBrandName;
+    private String productCategory;
+    private String productSubCategory;
+    private double productPrice;
+    private int productStock;
 }

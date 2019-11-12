@@ -11,6 +11,4 @@ public interface ProductRepository extends MongoRepository<Product,String> {
 
     public Product findByProductName(String productName);
 
-
-
 }

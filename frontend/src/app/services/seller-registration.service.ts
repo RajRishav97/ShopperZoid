@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Seller1 } from '../seller-registration/seller';
-
+import { environment } from 'src/environments/environment'
 
 
 const httpOptions = {
@@ -17,7 +17,7 @@ const httpOptions = {
 })
 export class SellerRegistrationService {
 
-  private add_url = 'http://15.206.62.131:8080/sellerProfile/api/v1/seller';
+  private add_url = environment.updateToDatabaseUrl;
   constructor(private http: HttpClient) { }
 
   add(seller: Seller1): Observable<any>{

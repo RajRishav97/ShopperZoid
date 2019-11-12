@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/v1/")
-@CrossOrigin(value = "*")
+@CrossOrigin(value = "*", allowedHeaders = "*")
 public class BuyerController {
 
         private BuyerService buyerService;
@@ -36,24 +36,18 @@ public class BuyerController {
      * Routing of save buyer method and setting field of BuyerDto via Buyer class
      */
         @PostMapping("buyer")
-        public ResponseEntity<?> saveBuyer(@RequestBody Buyer buyer) throws DatabaseConnectivityFailedException, BuyerAlreadyExistException, Exception{
+        public ResponseEntity<?> saveBuyer(@RequestBody BuyerDto buyerDto) throws DatabaseConnectivityFailedException, BuyerAlreadyExistException, Exception{
+
+            Buyer buyer=new Buyer();
+            buyer.setBuyerEmail(buyerDto.getBuyerEmail());
+            buyer.setBuyerName(buyerDto.getBuyerName());
+            buyer.setBuyerPhone(buyerDto.getBuyerPhone());
             Buyer savedBuyer = buyerService.saveBuyer(buyer);
-            BuyerDto buyerDto=new BuyerDto();
-            buyerDto.setBuyerEmail(buyer.getBuyerEmail());
-            buyerDto.setBuyerName(buyer.getBuyerName());
-            buyerDto.setBuyerPhone(buyer.getBuyerPhone());
-            buyerDto.setPassword(buyer.getPassword());
 
             BuyerRecomDto buyerRecomDto=new BuyerRecomDto();
             buyerRecomDto.setBuyerEmail(buyer.getBuyerEmail());
-            buyerRecomDto.setBuyerDob(buyer.getBuyerDob());
-            buyerRecomDto.setBuyerGender(buyer.getBuyerGender());
-            buyerRecomDto.setBuyerHomeAddress(buyer.getBuyerHomeAddress());
             buyerRecomDto.setBuyerName(buyer.getBuyerName());
-            buyerRecomDto.setBuyerImage(buyer.getBuyerImage());
             buyerRecomDto.setBuyerPhone(buyer.getBuyerPhone());
-            buyerRecomDto.setSellerRating(buyer.getBuyerRating());
-            buyerRecomDto.setBuyerOfficeAddress(buyer.getBuyerOfficeAddress());
 
             responseEntity = new ResponseEntity<Buyer>(savedBuyer, HttpStatus.CREATED);
             this.producer.sendMessageBuyerDto(buyerDto);
